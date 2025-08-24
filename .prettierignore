@@ -1,0 +1,16 @@
+# Node modules and build outputs
+node_modules
+.next
+out
+build
+dist
+
+# TypeScript environment file
+next-env.d.ts
+
+# Environment files
+.env*
+  
+# Drizzle ORM and documentation
+drizzle
+docs
