@@ -17,6 +17,8 @@ Moviebox allows users to:
 - Maintain a private user profile
 - Experience smooth performance across devices
 
+For the complete requirements and acceptance criteria, see [docs/requirements.md].
+
 ---
 
 ## Getting Started
