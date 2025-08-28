@@ -1,4 +1,5 @@
 import eslint from "@eslint/js"
+import nextPlugin from "@next/eslint-plugin-next"
 import prettierRecommended from "eslint-plugin-prettier/recommended"
 import simpleImportSort from "eslint-plugin-simple-import-sort"
 import tseslint from "typescript-eslint"
@@ -19,7 +20,14 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,
-  prettierRecommended,
+  {
+    plugins: {
+      "@next/next": nextPlugin,
+    },
+    rules: {
+      ...nextPlugin.configs.recommended.rules,
+    },
+  },
   {
     plugins: {
       "simple-import-sort": simpleImportSort,
@@ -33,6 +41,22 @@ export default tseslint.config(
       ],
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          varsIgnorePattern: "^_",
+          argsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+      "no-unused-vars": [
+        "error",
+        {
+          varsIgnorePattern: "^_",
+          argsIgnorePattern: "^_",
+        },
+      ],
     },
   },
+  prettierRecommended,
 )
