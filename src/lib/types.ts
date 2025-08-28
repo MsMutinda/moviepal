@@ -6,15 +6,24 @@ export type Genre = {
 export type Movie = {
   id: number
   title: string
+  tagline?: string
+  status?: string
+  homepage?: string
+  original_language?: string
   overview: string
   poster_path: string
   backdrop_path: string
   release_date: string
   runtime?: number
   vote_average: number
+  vote_count: number
   genre_ids: number[]
   popularity: number
   keywords?: string[]
+  genres?: Genre[]
+  credits?: Credits
+  production_companies?: ProductionCompany[]
+  spoken_languages?: SpokenLanguage[]
 }
 
 export type Keyword = {
@@ -34,6 +43,37 @@ export type Trailer = {
 export type TrailerResponse = {
   id: number
   results: Trailer[]
+}
+
+export type ProductionCompany = {
+  id: number
+  name: string
+  logo_path: string | null
+}
+
+export type Credits = {
+  cast: CastMember[]
+  crew: CrewMember[]
+}
+
+export type CastMember = {
+  id: number
+  name: string
+  character: string
+  profile_path: string | null
+}
+
+export type CrewMember = {
+  id: number
+  name: string
+  job: string
+  profile_path: string | null
+}
+
+export type SpokenLanguage = {
+  english_name: string
+  iso_639_1: string
+  name: string
 }
 
 export type MovieTab = "trending" | "popular" | "top_rated"

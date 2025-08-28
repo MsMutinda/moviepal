@@ -5,7 +5,7 @@ import { appInfo } from "@/lib/constants"
 
 export function Footer() {
   return (
-    <footer className="bg-card border-border mt-20 border-t">
+    <footer className="bg-card border-border mt-8 border-t">
       <div className="container mx-auto px-4 py-12 sm:px-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="space-y-4">

@@ -110,7 +110,7 @@ export default function LandingPage() {
   if (isLoading) {
     return (
       <div className="bg-background flex min-h-screen items-center justify-center">
-        <div className="h-32 w-32 animate-spin rounded-full border-b-2 border-[#009A9C]"></div>
+        <div className="h-16 w-16 animate-spin rounded-full border-b-2 border-[#009A9C]"></div>
       </div>
     )
   }
@@ -174,23 +174,22 @@ export default function LandingPage() {
                     {trendingMovie.overview}
                   </p>
 
-                  {trendingMovieTrailer?.official &&
-                    trendingMovieTrailer?.site === "YouTube" && (
-                      <div className="flex flex-col gap-3 pt-4 sm:flex-row">
-                        <Link
-                          target="_blank"
-                          href={`${trendingMovieTrailer?.official && trendingMovieTrailer?.site === "YouTube" ? `https://www.youtube.com/watch?v=${trendingMovieTrailer.key}` : "#"}`}
+                  {trendingMovieTrailer && trendingMovieTrailer.key && (
+                    <div className="flex flex-col gap-3 pt-4 sm:flex-row">
+                      <Link
+                        target="_blank"
+                        href={`https://www.youtube.com/watch?v=${trendingMovieTrailer.key}`}
+                      >
+                        <Button
+                          size="lg"
+                          variant="outline"
+                          className="w-full border-[#CCCCCC]/50 bg-[#009A9C] text-white backdrop-blur-sm hover:bg-[#009A9C]/70 sm:w-auto"
                         >
-                          <Button
-                            size="lg"
-                            variant="outline"
-                            className="w-full border-[#CCCCCC]/50 bg-[#009A9C] text-white backdrop-blur-sm hover:bg-[#009A9C]/70 sm:w-auto"
-                          >
-                            Watch Trailer
-                          </Button>
-                        </Link>
-                      </div>
-                    )}
+                          Watch Trailer
+                        </Button>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -226,7 +225,7 @@ export default function LandingPage() {
               <>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
                   {discoverMovies.map((movie) => (
-                    <Link key={movie.id} href={`/movie/${movie.id}`}>
+                    <Link key={movie.id} href={`/movies/${movie.id}`}>
                       <Card className="group cursor-pointer overflow-hidden border-[#CCCCCC]/50 py-0 transition-all duration-300 hover:scale-105 hover:border-[#009A9C]/50">
                         <CardContent className="p-0">
                           <div className="relative">

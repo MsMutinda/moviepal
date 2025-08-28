@@ -76,25 +76,7 @@ export function useLandingPageData() {
   const [trendingMovies, popularMovies, topRatedMovies, genres] = results
   const trendingMovie = (trendingMovies.data ?? [])[0] as Movie | undefined
 
-  const movieTrailerQuery = useQuery({
-    enabled: !!trendingMovie?.id,
-    queryKey: ["tmdb", TMDB_TAGS.trailer(trendingMovie?.id ?? 0)],
-    queryFn: ({ signal }) =>
-      fetch(`${routes.api.movies.trending}/${trendingMovie?.id}/videos`, {
-        signal,
-      })
-        .then((res) => {
-          if (res.ok) return res.json()
-          else throw new Error("Failed to fetch movie trailer")
-        })
-        .then((videos: TrailerResponse) => {
-          const trailer = videos?.results?.find(
-            (v: Trailer) => v.type === "Trailer" && v.site === "YouTube",
-          )
-          return (trailer ?? null) as Trailer | null
-        }),
-    retry: 2,
-  })
+  const movieTrailerQuery = useMovieTrailer(trendingMovie?.id)
 
   const isLoading =
     results.some((q) => q.isLoading) ||
@@ -106,7 +88,7 @@ export function useLandingPageData() {
     topRated: topRatedMovies.data ?? [],
     genres: genres.data ?? [],
     trendingMovie: trendingMovie ?? null,
-    trendingMovieTrailer: (movieTrailerQuery.data as Trailer | null) ?? null,
+    trendingMovieTrailer: (movieTrailerQuery.data ?? null) as Trailer | null,
     isLoading,
     errors: results.map((query) => query.error).filter(Boolean),
   }
@@ -308,4 +290,78 @@ export function useMovieDiscoveryInfinite(opts: {
     hasActiveFilters,
     error: infiniteQuery.error || null,
   }
+}
+
+export function useMovieDetails(movieId: string) {
+  const movieQuery = useQuery({
+    queryKey: ["tmdb", "movie", movieId],
+    queryFn: async ({ signal }) => {
+      if (!movieId) throw new Error("Movie ID is required")
+
+      const res = await fetch(routes.api.movies.details(movieId), { signal })
+      if (!res.ok) {
+        throw new Error(`Failed to fetch movie details: ${res.status}`)
+      }
+
+      return res.json() as Promise<Movie>
+    },
+    enabled: !!movieId,
+    retry: 2,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  })
+
+  const trailerQuery = useMovieTrailer(movieId)
+
+  return {
+    movie: movieQuery.data,
+    trailer: trailerQuery.data,
+    isLoading: movieQuery.isLoading,
+    isError: movieQuery.isError,
+    error: movieQuery.error,
+    refetch: () => {
+      movieQuery.refetch()
+      trailerQuery.refetch()
+    },
+  }
+}
+
+export function useMovieTrailer(movieId: string | number | undefined) {
+  return useQuery({
+    enabled: !!movieId,
+    queryKey: ["tmdb", TMDB_TAGS.trailer(Number(movieId) || 0)],
+    queryFn: async ({ signal }) => {
+      try {
+        if (!movieId) return null
+        const res = await fetch(routes.api.movies.videos(movieId!), { signal })
+
+        if (!res.ok) {
+          throw new Error(`Failed to fetch movie trailer: ${res.status}`)
+        }
+
+        let videos: TrailerResponse | null = null
+        try {
+          videos = await res.json()
+        } catch (error) {
+          console.error("Error parsing trailer response:", error)
+          return null
+        }
+
+        if (!videos?.results || !Array.isArray(videos.results)) {
+          return null
+        }
+
+        const trailer = videos.results.find(
+          (v: Trailer) =>
+            v.official && v.type === "Trailer" && v.site === "YouTube",
+        )
+
+        return trailer || null
+      } catch (error) {
+        console.error("Error fetching trailer:", error)
+        throw error
+      }
+    },
+    retry: 2,
+  })
 }

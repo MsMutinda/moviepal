@@ -13,11 +13,13 @@ export const routes = {
   api: {
     genres: "/api/genres",
     movies: {
-      popular: "/api/popular",
-      trending: "/api/trending",
-      topRated: "/api/top_rated",
-      discover: "/api/discover",
-      search: "/api/search",
+      popular: "/api/movies/popular",
+      trending: "/api/movies/trending",
+      topRated: "/api/movies/top_rated",
+      discover: "/api/movies/discover",
+      search: "/api/movies/search",
+      details: (id: string | number) => `/api/movies/${id}`,
+      videos: (id: string | number) => `/api/movies/${id}/videos`,
     },
   },
   auth: {

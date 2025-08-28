@@ -1,12 +1,14 @@
 import { tmdbApiKey, tmdbBaseUrl } from "@/lib/constants"
 import {
   ApiResponse,
+  Credits,
   Genre,
   Keyword,
   Movie,
   TMDBRequestOpts,
   Trailer,
 } from "@/lib/types"
+import { buildQueryString } from "@/lib/utils/api"
 
 export const TMDB_TAGS = {
   genres: "tmdb:genres",
@@ -22,17 +24,6 @@ export const TMDB_TAGS = {
 } as const
 
 class TmdbService {
-  private buildQueryString(params?: TMDBRequestOpts["query"]) {
-    const query = new URLSearchParams()
-    if (!params) return ""
-    Object.entries(params).forEach(([k, v]) => {
-      if (v === undefined || v === null) return
-      query.set(k, String(v))
-    })
-    const s = query.toString()
-    return s ? `&${s}` : ""
-  }
-
   async request<T>(
     path: string,
     opts: TMDBRequestOpts = {
@@ -50,7 +41,7 @@ class TmdbService {
 
     const url =
       `${tmdbBaseUrl}${path}?api_key=${tmdbApiKey}&language=${encodeURIComponent(opts.language ?? "en-US")}` +
-      `${this.buildQueryString(opts.query as TMDBRequestOpts["query"])}`
+      `${buildQueryString(opts.query as TMDBRequestOpts["query"])}`
 
     let attempt = 0
     const backoff = (n: number) =>
@@ -147,8 +138,9 @@ class TmdbService {
     id: number,
     getKeywords = false,
     getTrailer = false,
+    getCredits = false,
     opts: TMDBRequestOpts = {},
-  ): Promise<Movie | Keyword[] | Trailer> {
+  ): Promise<Movie | Keyword[] | Trailer | Credits> {
     if (getKeywords) {
       return this.request(`/movie/${id}/keywords`, {
         revalidate: opts.revalidate,
@@ -160,6 +152,13 @@ class TmdbService {
       return this.request(`/movie/${id}/videos`, {
         revalidate: opts.revalidate,
         tags: [TMDB_TAGS.movie(id), TMDB_TAGS.trailer(id)],
+      })
+    }
+
+    if (getCredits) {
+      return this.request(`/movie/${id}/credits`, {
+        revalidate: opts.revalidate,
+        tags: [TMDB_TAGS.movie(id)],
       })
     }
 

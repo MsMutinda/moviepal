@@ -77,7 +77,7 @@ export function MovieGrid({
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
         {uniqueMovies.map((movie) => (
-          <Link key={movie.id} href={`/movie/${movie.id}`}>
+          <Link key={movie.id} href={`/movies/${movie.id}`}>
             <Card className="group cursor-pointer overflow-hidden border-[#CCCCCC]/50 py-0 transition-all duration-300 hover:scale-105 hover:border-[#009A9C]/50">
               <CardContent className="p-0">
                 <div className="relative">
