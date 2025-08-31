@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useMovieDetails } from "@/hooks/use-movies"
-import { tmdbBaseImageUrl } from "@/lib/constants"
+import { routes, tmdbBaseImageUrl } from "@/lib/constants"
 import {
   CastMember,
   Genre,
@@ -40,7 +40,7 @@ export default function MovieDetailPage() {
     <div className="bg-background min-h-screen">
       <div className="relative z-20 px-6 pt-20">
         <Button
-          onClick={() => router.push("/")}
+          onClick={() => router.push(routes.home)}
           variant="ghost"
           size="sm"
           className="bg-background/80 hover:bg-background/90 backdrop-blur-sm"

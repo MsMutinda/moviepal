@@ -1,7 +1,7 @@
 import { Instagram, Twitter, Youtube } from "lucide-react"
 import Link from "next/link"
 
-import { appInfo } from "@/lib/constants"
+import { appInfo, routes } from "@/lib/constants"
 
 export function Footer() {
   return (
@@ -9,7 +9,7 @@ export function Footer() {
       <div className="container mx-auto px-4 py-12 sm:px-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href={routes.home} className="flex items-center space-x-2">
               <h3 className="text-2xl font-bold text-[#009A9C]">
                 {appInfo.name}
               </h3>
