@@ -5,6 +5,8 @@ import {
   Genre,
   Keyword,
   Movie,
+  Region,
+  SpokenLanguage,
   TMDBRequestOpts,
   Trailer,
 } from "@/lib/types"
@@ -12,6 +14,8 @@ import { buildQueryString } from "@/lib/utils/api"
 
 export const TMDB_TAGS = {
   genres: "tmdb:genres",
+  languages: "tmdb:languages",
+  regions: "tmdb:regions",
   movie: (id: number | string) => `tmdb:movie:${id}`,
   trending: "tmdb:trending",
   popular: "tmdb:popular:movie",
@@ -165,6 +169,56 @@ class TmdbService {
     return this.request(`/movie/${id}`, {
       revalidate: opts.revalidate,
       tags: [TMDB_TAGS.movie(id)],
+    })
+  }
+
+  getLanguages(
+    page = 1,
+    limit = 50,
+    opts: TMDBRequestOpts = {},
+  ): Promise<ApiResponse> {
+    return this.request<SpokenLanguage[]>("/configuration/languages", {
+      revalidate: 86_400,
+      tags: [TMDB_TAGS.languages],
+      ...opts,
+    }).then((languages) => {
+      const startIndex = (page - 1) * limit
+      const results = languages
+      const endIndex = startIndex + limit
+      const paginatedLanguages = results.slice(startIndex, endIndex)
+      const totalPages = Math.ceil(results.length / limit)
+
+      return {
+        results: paginatedLanguages,
+        page,
+        total_pages: totalPages,
+        total_results: results.length,
+      }
+    })
+  }
+
+  getRegions(
+    page = 1,
+    limit = 50,
+    opts: TMDBRequestOpts = {},
+  ): Promise<ApiResponse> {
+    return this.request<Region[]>("/configuration/countries", {
+      revalidate: 86_400,
+      tags: [TMDB_TAGS.regions],
+      ...opts,
+    }).then((regions) => {
+      const startIndex = (page - 1) * limit
+      const results = regions
+      const endIndex = startIndex + limit
+      const paginatedRegions = results.slice(startIndex, endIndex)
+      const totalPages = Math.ceil(results.length / limit)
+
+      return {
+        results: paginatedRegions,
+        page: page,
+        total_pages: totalPages,
+        total_results: results.length,
+      }
     })
   }
 }

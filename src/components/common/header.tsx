@@ -5,8 +5,8 @@ import Link from "next/link"
 import { ThemeToggle } from "@/components/common/theme-toggle"
 import { Button } from "@/components/ui/button"
 import { UserNav } from "@/components/user-menu"
-import { appInfo, routes } from "@/lib/constants"
 import { authClient } from "@/lib/clients/auth"
+import { appInfo, routes } from "@/lib/constants"
 
 export function Header() {
   const { data, isPending } = authClient.useSession()
@@ -22,18 +22,19 @@ export function Header() {
 
       <div className="flex items-center gap-2 sm:gap-4">
         <ThemeToggle />
-      
-        {isPending || !user && (
-          <div className="flex items-center gap-2">
-            <Button
-              asChild
-              className="bg-[#009A9C] px-3 py-2 text-xs text-white hover:bg-[#009A9C]/90 sm:px-4 sm:text-sm"
-            >
-              <Link href={routes.auth.signup}>Get started for free</Link>
-            </Button>
-          </div>
-        )}
-        
+
+        {isPending ||
+          (!user && (
+            <div className="flex items-center gap-2">
+              <Button
+                asChild
+                className="bg-[#009A9C] px-3 py-2 text-xs text-white hover:bg-[#009A9C]/90 sm:px-4 sm:text-sm"
+              >
+                <Link href={routes.auth.signup}>Get started for free</Link>
+              </Button>
+            </div>
+          ))}
+
         <UserNav isPending={isPending} user={user ?? null} />
       </div>
     </header>

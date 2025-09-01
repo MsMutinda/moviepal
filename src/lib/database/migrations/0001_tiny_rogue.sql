@@ -1,0 +1,1 @@
+ALTER TABLE "auth"."users" ADD COLUMN "preferences" jsonb DEFAULT '{"language":"en","region":"US","genres":[]}'::jsonb;

@@ -16,7 +16,13 @@ export default function QueryProvider({
           queries: {
             staleTime: 5 * 60_000,
             gcTime: 10 * 60_000,
-            retry: 2,
+            retry: (failureCount, error) => {
+              // Don't retry on AbortError
+              if (error instanceof Error && error.name === "AbortError") {
+                return false
+              }
+              return failureCount < 2
+            },
             refetchOnWindowFocus: false,
             retryDelay: (attemptIndex) =>
               Math.min(1000 * 2 ** attemptIndex, 30000),

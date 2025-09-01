@@ -16,7 +16,7 @@ import { useParams, useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { useMovieDetails } from "@/hooks/use-movies"
+import { useMovieDetails } from "@/hooks/use-tmdb-data"
 import { routes, tmdbBaseImageUrl } from "@/lib/constants"
 import {
   CastMember,

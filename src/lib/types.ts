@@ -80,7 +80,7 @@ export type MovieTab = "trending" | "popular" | "top_rated"
 
 export type ApiResponse = {
   page?: number
-  results: Movie[]
+  results: Movie[] | Region[] | SpokenLanguage[]
   total_pages?: number
   total_results?: number
 }
@@ -92,4 +92,16 @@ export type TMDBRequestOpts = {
   query?: Record<string, string | number | boolean | undefined>
   language?: string // defaults to en-US
   retries?: number
+}
+
+export type Region = {
+  iso_3166_1: string
+  english_name: string
+  native_name: string
+}
+
+export type UserPreferences = {
+  language: string // ISO-639-1 like 'en', 'pt-BR'
+  region?: string // ISO-3166-1 alpha-2 like 'US', 'GB'
+  genres?: number[]
 }

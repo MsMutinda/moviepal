@@ -13,12 +13,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useDebouncedValue } from "@/hooks/use-debounce"
-import type { MovieDiscoveryParams } from "@/hooks/use-movies"
+import type { MovieDiscoveryParams } from "@/hooks/use-tmdb-data"
 import {
   useLandingPageData,
   useMovieDiscoveryInfinite,
   useMovieTabs,
-} from "@/hooks/use-movies"
+} from "@/hooks/use-tmdb-data"
 import { tmdbBaseImageUrl } from "@/lib/constants"
 import { MovieTab } from "@/lib/types"
 

@@ -12,6 +12,8 @@ export const routes = {
   home: "/",
   api: {
     genres: "/api/genres",
+    languages: "/api/languages",
+    regions: "/api/regions",
     movies: {
       popular: "/api/movies/popular",
       trending: "/api/movies/trending",
@@ -21,12 +23,15 @@ export const routes = {
       details: (id: string | number) => `/api/movies/${id}`,
       videos: (id: string | number) => `/api/movies/${id}/videos`,
     },
+    account: {
+      preferences: "/api/account/preferences",
+    },
   },
   auth: {
     signup: "/auth/signup",
     signin: "/auth/signin",
   },
-  user: {
-    profile: "/user/profile",
+  account: {
+    profile: "/account/profile",
   },
 }

@@ -1,25 +1,25 @@
 "use client"
 
+import { User } from "better-auth"
 import { ChevronsUpDown, LogOutIcon, UserIcon } from "lucide-react"
+import Link from "next/link"
 import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { startTransition, useActionState, useState } from "react"
 import { toast } from "sonner"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useRouter } from "next/navigation"
+import { Skeleton } from "@/components/ui/skeleton"
 import { authClient } from "@/lib/clients/auth"
 import { routes } from "@/lib/constants"
-import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils/styles"
-import { User } from "better-auth"
 
 function getInitials(name: string): string {
   const names = name.trim().split(" ")
@@ -33,7 +33,7 @@ function UserNavSkeleton() {
   return (
     <Button
       size="lg"
-      className="hover:bg-transparent active:bg-transparent gap-2 justify-start"
+      className="justify-start gap-2 hover:bg-transparent active:bg-transparent"
       aria-label="Loading user menu"
       disabled
     >
@@ -46,7 +46,13 @@ function UserNavSkeleton() {
   )
 }
 
-export function UserNav({ isPending, user }: { isPending: boolean, user: User | null }) {
+export function UserNav({
+  isPending,
+  user,
+}: {
+  isPending: boolean
+  user: User | null
+}) {
   const [isSignedOut, setIsSignedOut] = useState(false)
   const router = useRouter()
   const [, formAction, isPendingLogout] = useActionState(async () => {
@@ -77,10 +83,11 @@ export function UserNav({ isPending, user }: { isPending: boolean, user: User | 
 
   if (!user) {
     return (
-      <Button asChild
+      <Button
+        asChild
         size="lg"
         variant="outline"
-        className="gap-2 justify-start bg-[#009A9C] hover:bg-[#009A9C]/90"
+        className="justify-start gap-2 bg-[#009A9C] hover:bg-[#009A9C]/90"
         aria-label="Sign in"
       >
         <Link href={routes.auth.signin} prefetch>
@@ -97,29 +104,44 @@ export function UserNav({ isPending, user }: { isPending: boolean, user: User | 
           size="lg"
           variant="ghost"
           aria-label="User menu"
-          className={cn("gap-2 px-2 sm:px-3 transition-colors hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background")}
-        > 
+          className={cn(
+            "hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground focus-visible:ring-ring focus-visible:ring-offset-background gap-2 px-2 transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 sm:px-3",
+          )}
+        >
           <Avatar className="size-8 rounded-lg">
             <AvatarImage src={user.image ?? ""} alt={user.name} />
-            <AvatarFallback className="rounded-lg bg-muted text-muted-foreground">{getInitials(user.name)}</AvatarFallback>
+            <AvatarFallback className="bg-muted text-muted-foreground rounded-lg">
+              {getInitials(user.name)}
+            </AvatarFallback>
           </Avatar>
-          <div className="hidden md:grid flex-1 text-left text-sm leading-tight">
+          <div className="hidden flex-1 text-left text-sm leading-tight md:grid">
             <span className="truncate font-medium">{user.name}</span>
-            <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+            <span className="text-muted-foreground truncate text-xs">
+              {user.email}
+            </span>
           </div>
           <ChevronsUpDown className="ml-auto size-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-[var(--radix-dropdown-menu-trigger-width)] rounded-lg bg-popover text-popover-foreground border border-border shadow-md"
+        className="bg-popover text-popover-foreground border-border w-[var(--radix-dropdown-menu-trigger-width)] rounded-lg border shadow-md"
         side="bottom"
         align="end"
         sideOffset={4}
       >
-        <DropdownMenuItem aria-label="Go to Profile" className="cursor-pointer" onClick={() => router.push(routes.user.profile)}>
-            <UserIcon /> Profile
+        <DropdownMenuItem
+          aria-label="Go to Profile"
+          className="cursor-pointer"
+          onClick={() => router.push(routes.account.profile)}
+        >
+          <UserIcon /> Profile
         </DropdownMenuItem>
-        <DropdownMenuItem disabled={isPendingLogout || isSignedOut} onClick={handleSignOut} aria-label="Sign out" className="cursor-pointer">
+        <DropdownMenuItem
+          disabled={isPendingLogout || isSignedOut}
+          onClick={handleSignOut}
+          aria-label="Sign out"
+          className="cursor-pointer"
+        >
           <LogOutIcon />
           {isPendingLogout || isSignedOut ? "Signing out..." : "Sign out"}
         </DropdownMenuItem>

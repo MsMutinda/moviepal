@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Eye, EyeOff, Play } from "lucide-react"
+import { ArrowLeft, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"

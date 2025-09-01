@@ -8,6 +8,13 @@
       "when": 1756497123251,
       "tag": "0000_bent_william_stryker",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1756688987168,
+      "tag": "0001_tiny_rogue",
+      "breakpoints": true
     }
   ]
 }

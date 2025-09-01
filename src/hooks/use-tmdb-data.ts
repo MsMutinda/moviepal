@@ -15,6 +15,8 @@ import type {
   Genre,
   Movie,
   MovieTab,
+  Region,
+  SpokenLanguage,
   Trailer,
   TrailerResponse,
 } from "@/lib/types"
@@ -170,7 +172,9 @@ export function useMovieTabs(active: MovieTab) {
   const flat = useMemo(() => {
     if (!activeQuery?.data?.pages) return []
 
-    const allMovies = activeQuery.data.pages.flatMap((p) => p?.results ?? [])
+    const allMovies = activeQuery.data.pages.flatMap(
+      (p) => (p?.results ?? []) as Movie[],
+    )
     const seenMovies = new Set<number>()
     const uniqueMovies = allMovies.filter((movie) => {
       if (seenMovies.has(movie.id)) {
@@ -265,7 +269,7 @@ export function useMovieDiscoveryInfinite(opts: {
       if (!infiniteQuery.data?.pages) return []
 
       const allMovies = infiniteQuery.data.pages.flatMap(
-        (p) => p?.results ?? [],
+        (p) => (p?.results ?? []) as Movie[],
       )
       const seenMovies = new Set<number>()
       const uniqueMovies = allMovies.filter((movie) => {
@@ -363,5 +367,61 @@ export function useMovieTrailer(movieId: string | number | undefined) {
       }
     },
     retry: 2,
+  })
+}
+
+export function useLanguagesInfinite() {
+  return useInfiniteQuery({
+    queryKey: ["tmdb", "languages", "infinite"],
+    queryFn: async ({ pageParam = 1, signal }) => {
+      const url = new URL(routes.api.languages, window.location.origin)
+      url.searchParams.set("page", pageParam.toString())
+      url.searchParams.set("limit", "50")
+      const res = await fetch(url.toString(), { signal })
+      if (!res.ok) throw new Error("Failed to fetch languages")
+      return (await res.json()) as {
+        results: SpokenLanguage[]
+        page: number
+        total_pages: number
+        total_results: number
+      }
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const next = (lastPage?.page ?? 1) + 1
+      const max = lastPage?.total_pages ?? 1
+      return next <= max ? next : undefined
+    },
+    retry: 2,
+    staleTime: 86_400_000,
+    gcTime: 86_400_000,
+  })
+}
+
+export function useRegionsInfinite() {
+  return useInfiniteQuery({
+    queryKey: ["tmdb", "regions", "infinite"],
+    queryFn: async ({ pageParam = 1, signal }) => {
+      const url = new URL(routes.api.regions, window.location.origin)
+      url.searchParams.set("page", pageParam.toString())
+      url.searchParams.set("limit", "50")
+      const res = await fetch(url.toString(), { signal })
+      if (!res.ok) throw new Error("Failed to fetch regions")
+      return (await res.json()) as {
+        results: Region[]
+        page: number
+        total_pages: number
+        total_results: number
+      }
+    },
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const next = (lastPage?.page ?? 1) + 1
+      const max = lastPage?.total_pages ?? 1
+      return next <= max ? next : undefined
+    },
+    retry: 2,
+    staleTime: 86_400_000,
+    gcTime: 86_400_000,
   })
 }

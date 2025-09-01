@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Eye, EyeOff, Play } from "lucide-react"
+import { ArrowLeft, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -103,7 +103,8 @@ export default function SignupPage() {
               Create account
             </CardTitle>
             <CardDescription className="text-center">
-              Join the Moviebox community and enjoy a world full of entertainment
+              Join the Moviebox community and enjoy a world full of
+              entertainment
             </CardDescription>
           </CardHeader>
           <CardContent>
