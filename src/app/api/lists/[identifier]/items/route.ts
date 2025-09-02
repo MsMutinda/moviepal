@@ -91,8 +91,7 @@ export async function GET(
         hasPrev: page > 1,
       },
     })
-  } catch (error) {
-    console.error("Error fetching list items:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },
@@ -191,8 +190,7 @@ export async function POST(
       .onConflictDoNothing()
 
     return NextResponse.json({ success: true, message: "Item added to list" })
-  } catch (error) {
-    console.error("Error adding item to list:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

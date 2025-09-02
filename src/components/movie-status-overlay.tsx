@@ -60,8 +60,7 @@ export function MovieStatusOverlay({
 
     try {
       await toggleLike(liked)
-    } catch (error) {
-      console.error("Error toggling like", error)
+    } catch {
       setLocalLiked(liked)
       onStatusUpdate({ liked })
     }
@@ -79,8 +78,7 @@ export function MovieStatusOverlay({
       } else {
         await setRating(score)
       }
-    } catch (error) {
-      console.error("Error setting rating", error)
+    } catch {
       setLocalRating(rating)
       onStatusUpdate({ rating })
     }

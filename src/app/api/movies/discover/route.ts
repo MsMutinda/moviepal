@@ -27,8 +27,7 @@ export async function GET(request: NextRequest) {
         total_results: 0,
       })
     }
-  } catch (error) {
-    console.error("Error in discover route:", error)
+  } catch {
     response = NextResponse.json({
       page: 1,
       results: [],

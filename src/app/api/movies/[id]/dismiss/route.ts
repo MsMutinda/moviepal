@@ -50,8 +50,7 @@ export async function POST(
     })
 
     return NextResponse.json({ dismissed: true })
-  } catch (error) {
-    console.error("Error dismissing movie:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },
@@ -97,8 +96,7 @@ export async function DELETE(
       )
 
     return NextResponse.json({ dismissed: false })
-  } catch (error) {
-    console.error("Error undismissing movie:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

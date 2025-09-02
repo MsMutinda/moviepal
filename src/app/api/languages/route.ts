@@ -19,8 +19,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(data)
-  } catch (error) {
-    console.error("Error in languages route:", error)
+  } catch {
     return NextResponse.json({
       results: [],
       page: 1,

@@ -33,7 +33,6 @@ export async function GET(
       rating: rating.length > 0 ? rating[0].score : null,
     })
   } catch (error) {
-    console.error("Error getting rating:", error)
     if (error instanceof Error && error.message === "Movie not found in TMDB") {
       return NextResponse.json({ error: "Movie not found" }, { status: 404 })
     }
@@ -97,7 +96,6 @@ export async function POST(
       return NextResponse.json({ success: true, rating: created })
     }
   } catch (error) {
-    console.error("Error adding/updating rating:", error)
     if (error instanceof Error && error.message === "Movie not found in TMDB") {
       return NextResponse.json({ error: "Movie not found" }, { status: 404 })
     }
@@ -136,7 +134,6 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Error removing rating:", error)
     if (error instanceof Error && error.message === "Movie not found in TMDB") {
       return NextResponse.json({ error: "Movie not found" }, { status: 404 })
     }

@@ -47,7 +47,6 @@ export async function GET(
       })
     }
   } catch (error) {
-    console.error("Error in movie videos route:", error)
     response = NextResponse.json({
       id: id,
       results: [],

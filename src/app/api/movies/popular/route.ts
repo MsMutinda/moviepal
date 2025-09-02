@@ -18,9 +18,7 @@ export async function GET(request: NextRequest) {
       total_pages: popular?.total_pages ?? 0,
       total_results: popular?.total_results ?? 0,
     })
-  } catch (error) {
-    console.error("Error in popular route:", error)
-
+  } catch {
     return NextResponse.json(
       {
         page: 1,

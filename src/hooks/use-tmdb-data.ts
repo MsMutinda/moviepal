@@ -281,8 +281,7 @@ export function useMovieDiscoveryInfinite(opts: {
       })
 
       return uniqueMovies
-    } catch (error) {
-      console.error("Error flattening discover movies:", error)
+    } catch {
       return []
     }
   }, [infiniteQuery.data?.pages])
@@ -335,36 +334,30 @@ export function useMovieTrailer(movieId: string | number | undefined) {
     enabled: !!movieId,
     queryKey: ["tmdb", TMDB_TAGS.trailer(Number(movieId) || 0)],
     queryFn: async ({ signal }) => {
-      try {
-        if (!movieId) return null
-        const res = await fetch(routes.api.movies.videos(movieId!), { signal })
+      if (!movieId) return null
+      const res = await fetch(routes.api.movies.videos(movieId!), { signal })
 
-        if (!res.ok) {
-          throw new Error(`Failed to fetch movie trailer: ${res.status}`)
-        }
-
-        let videos: TrailerResponse | null = null
-        try {
-          videos = await res.json()
-        } catch (error) {
-          console.error("Error parsing trailer response:", error)
-          return null
-        }
-
-        if (!videos?.results || !Array.isArray(videos.results)) {
-          return null
-        }
-
-        const trailer = videos.results.find(
-          (v: Trailer) =>
-            v.official && v.type === "Trailer" && v.site === "YouTube",
-        )
-
-        return trailer || null
-      } catch (error) {
-        console.error("Error fetching trailer:", error)
-        throw error
+      if (!res.ok) {
+        throw new Error(`Failed to fetch movie trailer: ${res.status}`)
       }
+
+      let videos: TrailerResponse | null = null
+      try {
+        videos = await res.json()
+      } catch {
+        return null
+      }
+
+      if (!videos?.results || !Array.isArray(videos.results)) {
+        return null
+      }
+
+      const trailer = videos.results.find(
+        (v: Trailer) =>
+          v.official && v.type === "Trailer" && v.site === "YouTube",
+      )
+
+      return trailer || null
     },
     retry: 2,
   })

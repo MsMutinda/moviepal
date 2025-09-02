@@ -123,8 +123,7 @@ export async function POST(request: NextRequest) {
     })
 
     return NextResponse.json({ movies: response })
-  } catch (error) {
-    console.error("Error fetching batch movie status:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

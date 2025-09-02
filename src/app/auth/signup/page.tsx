@@ -72,11 +72,10 @@ export default function SignupPage() {
         })
         router.push(routes.home)
       }
-    } catch (error) {
+    } catch {
       toast("Error", {
         description: "Something went wrong. Please try again.",
       })
-      console.error(error)
     } finally {
       setIsLoading(false)
     }

@@ -34,7 +34,6 @@ export async function GET(
 
     return NextResponse.json({ liked: like.length > 0 })
   } catch (error) {
-    console.error("Error checking like status:", error)
     if (error instanceof Error && error.message === "Movie not found in TMDB") {
       return NextResponse.json({ error: "Movie not found" }, { status: 404 })
     }
@@ -128,7 +127,6 @@ export async function POST(
       },
     )
   } catch (error) {
-    console.error("Error toggling like:", error)
     if (error instanceof Error && error.message === "Movie not found in TMDB") {
       return NextResponse.json({ error: "Movie not found" }, { status: 404 })
     }
@@ -208,7 +206,6 @@ export async function DELETE(
       },
     )
   } catch (error) {
-    console.error("Error removing like:", error)
     if (error instanceof Error && error.message === "Movie not found in TMDB") {
       return NextResponse.json({ error: "Movie not found" }, { status: 404 })
     }

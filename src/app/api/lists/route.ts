@@ -49,8 +49,7 @@ export async function POST(request: NextRequest) {
       .returning()
 
     return NextResponse.json(created)
-  } catch (error) {
-    console.error("Error creating list:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },
@@ -72,8 +71,7 @@ export async function GET(request: NextRequest) {
       .from(lists)
       .where(eq(lists.userId, session.user.id))
     return NextResponse.json(userLists)
-  } catch (error) {
-    console.error("Error in lists route:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },
@@ -126,8 +124,7 @@ export async function DELETE(request: NextRequest) {
       .where(and(eq(lists.id, listId), eq(lists.userId, userId)))
 
     return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error("Error deleting list:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

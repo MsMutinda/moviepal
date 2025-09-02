@@ -54,11 +54,10 @@ export default function LoginPage() {
           description: "You've been successfully logged in.",
         })
       }
-    } catch (error) {
+    } catch {
       toast("Error", {
         description: "Something went wrong. Please try again.",
       })
-      console.error(error)
     } finally {
       setIsLoading(false)
     }

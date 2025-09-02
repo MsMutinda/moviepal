@@ -18,9 +18,7 @@ export async function GET(request: NextRequest) {
       total_pages: topRated?.total_pages ?? 0,
       total_results: topRated?.total_results ?? 0,
     })
-  } catch (error) {
-    console.error("Error in top_rated route:", error)
-
+  } catch {
     return NextResponse.json(
       {
         page: 1,

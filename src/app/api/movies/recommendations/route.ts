@@ -141,8 +141,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(result, { headers: response.headers })
-  } catch (error) {
-    console.error("Error generating recommendations:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

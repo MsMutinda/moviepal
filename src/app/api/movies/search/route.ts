@@ -17,21 +17,20 @@ export async function GET(request: NextRequest) {
         total_pages: 0,
         total_results: 0,
       })
-    }
-
-    const data = await tmdbService.searchMovies(q!.trim(), Number(page))
-    if (data && data.results) {
-      response = NextResponse.json(data)
     } else {
-      response = NextResponse.json({
-        page: Number(page),
-        results: [],
-        total_pages: 0,
-        total_results: 0,
-      })
+      const data = await tmdbService.searchMovies(q.trim(), Number(page))
+      if (data && data.results) {
+        response = NextResponse.json(data)
+      } else {
+        response = NextResponse.json({
+          page: Number(page),
+          results: [],
+          total_pages: 0,
+          total_results: 0,
+        })
+      }
     }
-  } catch (error) {
-    console.error("Error in search route:", error)
+  } catch {
     response = NextResponse.json({
       page: 1,
       results: [],

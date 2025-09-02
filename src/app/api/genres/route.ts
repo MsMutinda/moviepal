@@ -12,8 +12,7 @@ export async function GET(_request: NextRequest) {
         genres: [],
       })
     }
-  } catch (error) {
-    console.error("Error in genres route:", error)
+  } catch {
     return NextResponse.json({
       genres: [],
     })

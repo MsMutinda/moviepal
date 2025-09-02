@@ -1,5 +1,6 @@
 import eslint from "@eslint/js"
 import nextPlugin from "@next/eslint-plugin-next"
+import jestPlugin from "eslint-plugin-jest"
 import prettierRecommended from "eslint-plugin-prettier/recommended"
 import simpleImportSort from "eslint-plugin-simple-import-sort"
 import tseslint from "typescript-eslint"
@@ -16,7 +17,31 @@ export default tseslint.config(
       "drizzle",
       ".env*",
       "docs",
+      "tsconfig.test.json",
+      "jest.setup.js",
+      "babel.config.jest.js",
     ],
+  },
+  {
+    files: ["**/__tests__/**/*", "**/*.test.*", "**/*.spec.*"],
+    plugins: {
+      jest: jestPlugin,
+    },
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.test.json",
+      },
+    },
+    rules: {
+      ...jestPlugin.configs.recommended.rules,
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+    },
   },
   eslint.configs.recommended,
   tseslint.configs.recommended,

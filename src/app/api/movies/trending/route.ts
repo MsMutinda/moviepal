@@ -18,9 +18,7 @@ export async function GET(request: NextRequest) {
       total_pages: trending?.total_pages ?? 0,
       total_results: trending?.total_results ?? 0,
     })
-  } catch (error) {
-    console.error("Error in trending route:", error)
-
+  } catch {
     return NextResponse.json(
       {
         page: 1,

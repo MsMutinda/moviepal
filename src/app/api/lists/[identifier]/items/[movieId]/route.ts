@@ -61,8 +61,7 @@ export async function DELETE(
       success: true,
       message: "Item successfully removed from list",
     })
-  } catch (error) {
-    console.error("Error removing item from list:", error)
+  } catch {
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

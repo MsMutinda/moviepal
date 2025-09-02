@@ -3,6 +3,11 @@ import { NextRequest } from "next/server"
 // in-memory rate limiting
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 
+// Function to clear the rate limit map (for testing)
+export function clearRateLimitMap() {
+  rateLimitMap.clear()
+}
+
 interface RateLimitOptions {
   windowMs: number // Time window in milliseconds
   maxRequests: number // Maximum requests per window
