@@ -1,28 +1,40 @@
 "use client"
 
-import { Bookmark, Star } from "lucide-react"
+import { Bookmark, Sparkles, Star, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo } from "react"
 
 import { AddListItemDialog } from "@/components/add-to-list-dialog"
 import { MovieStatusOverlay } from "@/components/movie-status-overlay"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useInfiniteScroll } from "@/hooks/use-intersection-observer"
 import { useListItemsMutations } from "@/hooks/use-list-items"
 import { useMovieBatchStatus } from "@/hooks/use-movie-batch-status"
+import { useMovieDismiss } from "@/hooks/use-movie-dismiss"
 import { tmdbBaseImageUrl } from "@/lib/constants"
 import { Movie } from "@/lib/types"
 
+interface RecommendationMovie extends Movie {
+  recommendationScore?: number
+  recommendationReason?: string
+}
+
+type MovieGridMovie = Movie | RecommendationMovie
+
 interface MovieGridProps {
-  movies: Movie[]
+  movies: MovieGridMovie[]
   isLoading?: boolean
   error?: string | null
   hasMore?: boolean
   isFetchingNextPage?: boolean
   onLoadMore?: () => void
   showPagination?: boolean
+  showRecommendationInfo?: boolean
+  showDismissButton?: boolean
+  batchStatusData?: Record<string, { liked: boolean; rating: number | null }>
 }
 
 export function MovieGrid({
@@ -33,6 +45,9 @@ export function MovieGrid({
   isFetchingNextPage = false,
   onLoadMore,
   showPagination = false,
+  showRecommendationInfo = false,
+  showDismissButton = false,
+  batchStatusData,
 }: MovieGridProps) {
   const { isAddingListItem } = useListItemsMutations()
   const uniqueMovies = useMemo(() => {
@@ -52,6 +67,13 @@ export function MovieGrid({
   )
 
   const { getMovieStatus, updateMovieStatus } = useMovieBatchStatus(movieIds)
+
+  const getMovieStatusData = (movieId: string) => {
+    if (batchStatusData && batchStatusData[movieId]) {
+      return batchStatusData[movieId]
+    }
+    return getMovieStatus(movieId)
+  }
 
   const sentinelRef = useInfiniteScroll(
     onLoadMore || (() => {}),
@@ -133,11 +155,14 @@ export function MovieGrid({
                     </AddListItemDialog>
                     <MovieStatusOverlay
                       movieId={movie.id.toString()}
-                      {...getMovieStatus(movie.id.toString())}
+                      {...getMovieStatusData(movie.id.toString())}
                       onStatusUpdate={(updates) =>
                         updateMovieStatus(movie.id.toString(), updates)
                       }
                     />
+                    {showDismissButton && (
+                      <DismissButton movieId={movie.id.toString()} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -147,6 +172,18 @@ export function MovieGrid({
                     {movie.title}
                   </h3>
                 </Link>
+
+                {showRecommendationInfo &&
+                  "recommendationReason" in movie &&
+                  movie.recommendationReason && (
+                    <div className="mb-2">
+                      <Badge variant="secondary" className="text-xs">
+                        <Sparkles className="mr-1 h-3 w-3" />
+                        {(movie as RecommendationMovie).recommendationReason}
+                      </Badge>
+                    </div>
+                  )}
+
                 <div className="flex items-center justify-between gap-1">
                   <p className="text-muted-foreground text-xs">
                     {movie.release_date
@@ -181,5 +218,26 @@ export function MovieGrid({
         </div>
       )}
     </div>
+  )
+}
+
+function DismissButton({ movieId }: { movieId: string }) {
+  const { dismissMovie, isDismissing } = useMovieDismiss(movieId)
+
+  return (
+    <Button
+      size="sm"
+      variant="destructive"
+      className="h-8 w-8 p-0 shadow-lg"
+      onClick={dismissMovie}
+      disabled={isDismissing}
+      title="Dismiss from recommendations"
+    >
+      {isDismissing ? (
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+      ) : (
+        <X className="h-4 w-4" />
+      )}
+    </Button>
   )
 }

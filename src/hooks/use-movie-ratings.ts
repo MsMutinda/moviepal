@@ -80,6 +80,8 @@ export function useMovieRating(movieId: string) {
     },
     onSuccess: (_, score) => {
       toast.success(`Rated ${score}/10`)
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey })
@@ -104,6 +106,8 @@ export function useMovieRating(movieId: string) {
     },
     onSuccess: () => {
       toast.success("Rating removed")
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey })

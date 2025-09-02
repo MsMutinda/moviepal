@@ -21,7 +21,10 @@ async function fetchLikeStatus(
   return res.json()
 }
 
-async function toggleLike(movieId: string, liked: boolean): Promise<void> {
+async function toggleLike(
+  movieId: string,
+  liked: boolean,
+): Promise<LikeResponse> {
   const url = routes.api.movies.likes(movieId)
   const method = liked ? "DELETE" : "POST"
 
@@ -35,6 +38,8 @@ async function toggleLike(movieId: string, liked: boolean): Promise<void> {
     const error = await res.text()
     throw new Error(error || `Failed to ${liked ? "unlike" : "like"} movie`)
   }
+
+  return res.json()
 }
 
 export function useMovieLike(movieId: string) {
@@ -65,8 +70,20 @@ export function useMovieLike(movieId: string) {
       }
       toast.error(error.message || "Failed to update like status")
     },
-    onSuccess: (_, { liked }) => {
-      toast.success(liked ? "Movie unliked" : "Movie liked!")
+    onSuccess: (response, { liked }) => {
+      const message =
+        response.message || (liked ? "Movie unliked" : "Movie liked!")
+      toast.success(message)
+
+      // Update the query data with the actual response
+      qc.setQueryData<LikeResponse>(queryKey, {
+        liked: response.liked,
+        action: response.action,
+        message: response.message,
+      })
+
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey })

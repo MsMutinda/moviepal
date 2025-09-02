@@ -152,6 +152,8 @@ export type ListItemsResponse = {
 
 export type LikeResponse = {
   liked: boolean
+  action?: "liked" | "unliked"
+  message?: string
 }
 
 export type RatingResponse = {

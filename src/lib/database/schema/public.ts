@@ -126,3 +126,23 @@ export const ratings = pgTable(
   }),
 )
 //#endregion
+
+//#region Dismissed Movies
+export const dismissedMovies = pgTable(
+  "dismissed_movies",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    movieId: uuid("movie_id")
+      .notNull()
+      .references(() => movies.id, { onDelete: "cascade" }),
+    dismissedAt: timestamp("dismissed_at", { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.movieId] }),
+    userIdx: index("dismissed_movies_user_id_idx").on(t.userId),
+    movieIdx: index("dismissed_movies_movie_id_idx").on(t.movieId),
+  }),
+)
+//#endregion

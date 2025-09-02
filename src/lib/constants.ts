@@ -20,10 +20,12 @@ export const routes = {
       topRated: "/api/movies/top_rated",
       discover: "/api/movies/discover",
       search: "/api/movies/search",
+      recommendations: "/api/movies/recommendations",
       details: (id: string | number) => `/api/movies/${id}`,
       videos: (id: string | number) => `/api/movies/${id}/videos`,
       likes: (id: string | number) => `/api/movies/${id}/likes`,
       ratings: (id: string | number) => `/api/movies/${id}/ratings`,
+      dismiss: (id: string | number) => `/api/movies/${id}/dismiss`,
       batchStatus: "/api/movies/batch-status",
     },
     account: {
@@ -48,6 +50,7 @@ export const routes = {
     profile: "/account/profile",
     lists: "/account/lists",
     listBySlug: (slug: string) => `/account/lists/${slug}`,
+    recommendations: "/account/recommendations",
   },
   movies: {
     details: (id: string | number) => `/movies/${id}`,

@@ -59,6 +59,8 @@ export function useUserPreferences() {
     },
     onSuccess: () => {
       toast.success("Preferences saved successfully")
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onSettled: () => {
       qc.invalidateQueries({ queryKey: ["user-prefs"] })

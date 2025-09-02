@@ -115,6 +115,8 @@ export function useListItems(slug: string, search: string = "") {
     onSuccess: (_) => {
       qc.invalidateQueries({ queryKey: ["list-items"] })
       qc.invalidateQueries({ queryKey: ["lists"] })
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
       toast.success("Item removed from list")
     },
     onError: (error) => {
@@ -147,6 +149,8 @@ export function useListItemsMutations() {
     onSuccess: (_, { movieTitle }) => {
       toast.success(`Added "${movieTitle}" to list`)
       qc.invalidateQueries({ queryKey: ["lists"] })
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onError: (error) => {
       toast.error(error.message || "Failed to add movie to list")
@@ -158,6 +162,8 @@ export function useListItemsMutations() {
     onSuccess: (_) => {
       toast.success(`Removed item from list`)
       qc.invalidateQueries({ queryKey: ["lists"] })
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onError: (error) => {
       toast.error(error.message || "Failed to remove item from list")
@@ -169,6 +175,8 @@ export function useListItemsMutations() {
     onSuccess: (newList, { movieTitle }) => {
       toast.success(`Created list "${newList.title}" and added "${movieTitle}"`)
       qc.invalidateQueries({ queryKey: ["lists"] })
+      qc.removeQueries({ queryKey: ["movie-recommendations"] })
+      qc.invalidateQueries({ queryKey: ["movie-recommendations"] })
     },
     onError: (error) => {
       toast.error(error.message || "Failed to create list and add item")

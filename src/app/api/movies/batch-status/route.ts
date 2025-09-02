@@ -34,13 +34,48 @@ export async function POST(request: NextRequest) {
     }
 
     const userId = session.user.id
-    const tmdbIds = movieIds.map((id) => parseInt(id))
 
-    const moviePromises = tmdbIds.map((tmdbId) => getOrCreateMovie(tmdbId))
+    const validMovieIds = movieIds.filter((id) => {
+      const parsed = parseInt(id)
+      if (isNaN(parsed) || parsed <= 0) {
+        console.warn(`Invalid movie ID: ${id}`)
+        return false
+      }
+      return true
+    })
+
+    if (validMovieIds.length === 0) {
+      return NextResponse.json({ movies: {} })
+    }
+
+    const tmdbIds = validMovieIds.map((id) => parseInt(id))
+
+    const moviePromises = tmdbIds.map(async (tmdbId) => {
+      try {
+        // add a timeout to prevent hanging requests
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Timeout")), 10000),
+        )
+
+        const moviePromise = getOrCreateMovie(tmdbId)
+        return await Promise.race([moviePromise, timeoutPromise])
+      } catch (error) {
+        console.warn(`Failed to get/create movie ${tmdbId}:`, error)
+        return null
+      }
+    })
     const movieResults = await Promise.allSettled(moviePromises)
 
     const validMovies = movieResults
-      .filter((result) => result.status === "fulfilled")
+      .filter((result) => {
+        if (result.status === "rejected") {
+          console.warn(`Failed to get/create movie:`, result.reason)
+          return false
+        }
+        const movie = (result as PromiseFulfilledResult<LocalMovie | null>)
+          .value
+        return movie !== null
+      })
       .map((result) => (result as PromiseFulfilledResult<LocalMovie>).value)
 
     if (validMovies.length === 0) {
