@@ -26,6 +26,16 @@ export const routes = {
     account: {
       preferences: "/api/account/preferences",
     },
+    lists: {
+      builtin: "/api/lists/builtin",
+      custom: "/api/lists",
+      items: (identifier: string) => `/api/lists/${identifier}/items`,
+      item: (identifier: string, movieId: string) =>
+        `/api/lists/${identifier}/items/${movieId}`,
+    },
+    auth: {
+      all: "/api/auth/[...all]",
+    },
   },
   auth: {
     signup: "/auth/signup",
@@ -33,5 +43,10 @@ export const routes = {
   },
   account: {
     profile: "/account/profile",
+    lists: "/account/lists",
+    listBySlug: (slug: string) => `/account/lists/${slug}`,
+  },
+  movies: {
+    details: (id: string | number) => `/movies/${id}`,
   },
 }

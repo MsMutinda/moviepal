@@ -105,3 +105,42 @@ export type UserPreferences = {
   region?: string // ISO-3166-1 alpha-2 like 'US', 'GB'
   genres?: number[]
 }
+
+export type List = {
+  id: string
+  title: string
+  slug: string
+  isBuiltin: boolean
+  builtinType: string
+}
+
+export type MovieMetadata = {
+  poster_path: string
+  backdrop_path: string
+  release_date: string
+  vote_average: number
+}
+
+export type ListItem = {
+  id: string
+  movieId: string
+  addedAt: string
+  movie: {
+    title: string
+    tmdbId: number
+    year?: number
+    metadata?: MovieMetadata
+  }
+}
+
+export type ListItemsResponse = {
+  items: ListItem[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+    hasNext: boolean
+    hasPrev: boolean
+  }
+}

@@ -2,6 +2,7 @@
 
 import {
   ArrowLeft,
+  Bookmark,
   Calendar,
   Clock,
   Globe,
@@ -13,11 +14,13 @@ import Image from "next/image"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 
+import { AddListItemDialog } from "@/components/add-to-list-dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { useListItemsMutations } from "@/hooks/use-list-items"
 import { useMovieDetails } from "@/hooks/use-tmdb-data"
-import { routes, tmdbBaseImageUrl } from "@/lib/constants"
+import { tmdbBaseImageUrl } from "@/lib/constants"
 import {
   CastMember,
   Genre,
@@ -32,6 +35,7 @@ export default function MovieDetailPage() {
   const movieId = params.id as string
 
   const { movie, trailer, isLoading, isError, error } = useMovieDetails(movieId)
+  const { isAddingListItem } = useListItemsMutations()
   const director = movie?.credits ? getDirector(movie.credits) : null
 
   const showLoader = isLoading || (!movie && !isError)
@@ -40,7 +44,7 @@ export default function MovieDetailPage() {
     <div className="bg-background min-h-screen">
       <div className="relative z-20 px-6 pt-20">
         <Button
-          onClick={() => router.push(routes.home)}
+          onClick={() => router.back()}
           variant="ghost"
           size="sm"
           className="bg-background/80 hover:bg-background/90 backdrop-blur-sm"
@@ -189,8 +193,8 @@ export default function MovieDetailPage() {
                       </div>
                     )}
 
-                    {trailer && trailer.key && (
-                      <div className="flex flex-wrap gap-3 pt-4">
+                    <div className="flex flex-wrap gap-3 pt-4">
+                      {trailer && trailer.key && (
                         <Link
                           href={`https://www.youtube.com/watch?v=${trailer.key}`}
                           target="_blank"
@@ -204,8 +208,27 @@ export default function MovieDetailPage() {
                             Watch Trailer
                           </Button>
                         </Link>
-                      </div>
-                    )}
+                      )}
+
+                      <AddListItemDialog
+                        movieId={movieId}
+                        movieTitle={movie.title || "Untitled Movie"}
+                      >
+                        <Button
+                          size="lg"
+                          variant="outline"
+                          className="bg-background/80 text-foreground hover:bg-background/90 w-full border-[#CCCCCC]/50 backdrop-blur-sm sm:w-auto"
+                          disabled={isAddingListItem}
+                        >
+                          {isAddingListItem ? (
+                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current"></div>
+                          ) : (
+                            <Bookmark className="mr-2 h-4 w-4" />
+                          )}
+                          {isAddingListItem ? "Adding..." : "Add to List"}
+                        </Button>
+                      </AddListItemDialog>
+                    </div>
                   </div>
                 </div>
               </div>

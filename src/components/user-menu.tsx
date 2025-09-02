@@ -1,7 +1,7 @@
 "use client"
 
 import { User } from "better-auth"
-import { ChevronsUpDown, LogOutIcon, UserIcon } from "lucide-react"
+import { ChevronsUpDown, ListIcon, LogOutIcon, UserIcon } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 import { useRouter } from "next/navigation"
@@ -135,6 +135,13 @@ export function UserNav({
           onClick={() => router.push(routes.account.profile)}
         >
           <UserIcon /> Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          aria-label="View Lists"
+          className="cursor-pointer"
+          onClick={() => router.push(routes.account.lists)}
+        >
+          <ListIcon /> Lists
         </DropdownMenuItem>
         <DropdownMenuItem
           disabled={isPendingLogout || isSignedOut}

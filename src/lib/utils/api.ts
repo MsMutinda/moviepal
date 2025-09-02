@@ -24,3 +24,16 @@ export const getDirector = (credits: Credits) => {
     }
   )
 }
+
+export const slugify = (text: string) => {
+  return text
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "")
+}
+
+export function isUUID(identifier: string): boolean {
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  return uuidRegex.test(identifier)
+}

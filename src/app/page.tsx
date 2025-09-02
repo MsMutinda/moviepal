@@ -1,7 +1,6 @@
 "use client"
 
 import { Calendar, Star } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
@@ -10,7 +9,6 @@ import SearchArea from "@/components/common/search-area"
 import { MovieGrid } from "@/components/movie-grid"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useDebouncedValue } from "@/hooks/use-debounce"
 import type { MovieDiscoveryParams } from "@/hooks/use-tmdb-data"
@@ -217,90 +215,15 @@ export default function LandingPage() {
               </Button>
             </div>
 
-            {isDiscoverLoading ? (
-              <div className="flex justify-center py-12">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#009A9C] border-t-transparent" />
-              </div>
-            ) : discoverMovies.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
-                  {discoverMovies.map((movie) => (
-                    <Link key={movie.id} href={`/movies/${movie.id}`}>
-                      <Card className="group cursor-pointer overflow-hidden border-[#CCCCCC]/50 py-0 transition-all duration-300 hover:scale-105 hover:border-[#009A9C]/50">
-                        <CardContent className="p-0">
-                          <div className="relative">
-                            <div className="aspect-[2/3] overflow-hidden">
-                              <Image
-                                width={500}
-                                height={750}
-                                src={
-                                  movie.poster_path
-                                    ? `${tmdbBaseImageUrl}w500${movie.poster_path}`
-                                    : "https://picsum.photos/500/750"
-                                }
-                                alt={movie.title}
-                                loading="eager"
-                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-                              />
-                              <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
-                            </div>
-                          </div>
-                          <div className="p-3">
-                            <h3 className="mb-1 line-clamp-2 text-sm font-semibold">
-                              {movie.title}
-                            </h3>
-                            <div className="flex items-center justify-between gap-1">
-                              <p className="text-muted-foreground text-xs">
-                                {movie.release_date
-                                  ? new Date(movie.release_date).getFullYear()
-                                  : "N/A"}
-                              </p>
-                              <div className="text-muted-foreground flex items-center gap-1 text-xs">
-                                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                                <span>
-                                  {movie.vote_average
-                                    ? movie.vote_average.toFixed(1)
-                                    : "N/A"}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
-                  ))}
-                </div>
-
-                <div ref={sentinelRef} className="h-10 w-full" />
-
-                {isFetchingNextPage && (
-                  <div className="flex justify-center py-6">
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#009A9C] border-t-transparent" />
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="mx-auto max-w-2xl p-8 text-center">
-                <div className="mb-4 text-6xl">🎬</div>
-                <h3 className="text-foreground mb-2 text-xl font-semibold">
-                  No movies found
-                </h3>
-                <p className="text-muted-foreground mb-4">
-                  Try adjusting your search terms or filters to find more
-                  movies.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {discoverError && (
-          <div className="container mx-auto mt-4">
-            <div className="mx-auto max-w-2xl p-4 text-center">
-              <p className="text-red-800">
-                Failed to load movies. Please refresh the page.
-              </p>
-            </div>
+            <MovieGrid
+              movies={discoverMovies}
+              isLoading={isDiscoverLoading}
+              error={discoverError ? discoverError.message : null}
+              hasMore={hasMore}
+              isFetchingNextPage={isFetchingNextPage}
+              onLoadMore={fetchNextPage}
+              showPagination={true}
+            />
           </div>
         )}
       </section>

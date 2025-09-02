@@ -1,12 +1,15 @@
 "use client"
 
-import { Star } from "lucide-react"
+import { Bookmark, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useMemo } from "react"
 
+import { AddListItemDialog } from "@/components/add-to-list-dialog"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useInfiniteScroll } from "@/hooks/use-intersection-observer"
+import { useListItemsMutations } from "@/hooks/use-list-items"
 import { tmdbBaseImageUrl } from "@/lib/constants"
 import { Movie } from "@/lib/types"
 
@@ -29,6 +32,7 @@ export function MovieGrid({
   onLoadMore,
   showPagination = false,
 }: MovieGridProps) {
+  const { isAddingListItem } = useListItemsMutations()
   const uniqueMovies = useMemo(() => {
     const seen = new Set<number>()
     return movies.filter((movie) => {
@@ -77,11 +81,14 @@ export function MovieGrid({
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4">
         {uniqueMovies.map((movie) => (
-          <Link key={movie.id} href={`/movies/${movie.id}`}>
-            <Card className="group cursor-pointer overflow-hidden border-[#CCCCCC]/50 py-0 transition-all duration-300 hover:scale-105 hover:border-[#009A9C]/50">
-              <CardContent className="p-0">
-                <div className="relative">
-                  <div className="aspect-[2/3] overflow-hidden">
+          <Card
+            key={movie.id}
+            className="group overflow-hidden border-[#CCCCCC]/50 py-0 transition-all duration-300 hover:scale-105 hover:border-[#009A9C]/50"
+          >
+            <CardContent className="p-0">
+              <div className="relative">
+                <div className="aspect-[2/3] overflow-hidden">
+                  <Link href={`/movies/${movie.id}`}>
                     <Image
                       width={500}
                       height={750}
@@ -95,31 +102,53 @@ export function MovieGrid({
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
+                  </Link>
+
+                  <div className="absolute top-2 right-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <AddListItemDialog
+                      movieId={movie.id}
+                      movieTitle={movie.title}
+                    >
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        className="h-8 w-8 p-0 shadow-lg"
+                        disabled={isAddingListItem}
+                      >
+                        {isAddingListItem ? (
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                        ) : (
+                          <Bookmark className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </AddListItemDialog>
                   </div>
                 </div>
-                <div className="p-3">
-                  <h3 className="mb-1 line-clamp-2 text-sm font-semibold">
+              </div>
+              <div className="p-3">
+                <Link href={`/movies/${movie.id}`}>
+                  <h3 className="hover:text-primary mb-1 line-clamp-2 text-sm font-semibold transition-colors">
                     {movie.title}
                   </h3>
-                  <div className="flex items-center justify-between gap-1">
-                    <p className="text-muted-foreground text-xs">
-                      {movie.release_date
-                        ? new Date(movie.release_date).getFullYear()
+                </Link>
+                <div className="flex items-center justify-between gap-1">
+                  <p className="text-muted-foreground text-xs">
+                    {movie.release_date
+                      ? new Date(movie.release_date).getFullYear()
+                      : "N/A"}
+                  </p>
+                  <div className="text-muted-foreground flex items-center gap-1 text-xs">
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span>
+                      {movie.vote_average
+                        ? movie.vote_average.toFixed(1)
                         : "N/A"}
-                    </p>
-                    <div className="text-muted-foreground flex items-center gap-1 text-xs">
-                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                      <span>
-                        {movie.vote_average
-                          ? movie.vote_average.toFixed(1)
-                          : "N/A"}
-                      </span>
-                    </div>
+                    </span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </Link>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
 
