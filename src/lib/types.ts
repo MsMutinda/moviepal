@@ -114,6 +114,16 @@ export type List = {
   builtinType: string
 }
 
+export type LocalMovie = {
+  id: string
+  tmdbId: number
+  title: string
+  year: number | null
+  metadata: MovieMetadata
+  createdAt: Date | null
+  updatedAt: Date | null
+}
+
 export type MovieMetadata = {
   poster_path: string
   backdrop_path: string
@@ -125,12 +135,7 @@ export type ListItem = {
   id: string
   movieId: string
   addedAt: string
-  movie: {
-    title: string
-    tmdbId: number
-    year?: number
-    metadata?: MovieMetadata
-  }
+  movie: LocalMovie
 }
 
 export type ListItemsResponse = {
@@ -143,4 +148,20 @@ export type ListItemsResponse = {
     hasNext: boolean
     hasPrev: boolean
   }
+}
+
+export type LikeResponse = {
+  liked: boolean
+}
+
+export type RatingResponse = {
+  rating: number | null
+}
+
+export type Rating = {
+  userId: string
+  movieId: string
+  score: number
+  createdAt: string
+  updatedAt: string
 }

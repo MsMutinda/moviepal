@@ -22,6 +22,9 @@ export const routes = {
       search: "/api/movies/search",
       details: (id: string | number) => `/api/movies/${id}`,
       videos: (id: string | number) => `/api/movies/${id}/videos`,
+      likes: (id: string | number) => `/api/movies/${id}/likes`,
+      ratings: (id: string | number) => `/api/movies/${id}/ratings`,
+      batchStatus: "/api/movies/batch-status",
     },
     account: {
       preferences: "/api/account/preferences",

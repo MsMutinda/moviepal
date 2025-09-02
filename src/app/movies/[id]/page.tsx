@@ -15,10 +15,12 @@ import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 
 import { AddListItemDialog } from "@/components/add-to-list-dialog"
+import { MovieStatusOverlay } from "@/components/movie-status-overlay"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useListItemsMutations } from "@/hooks/use-list-items"
+import { useMovieBatchStatus } from "@/hooks/use-movie-batch-status"
 import { useMovieDetails } from "@/hooks/use-tmdb-data"
 import { tmdbBaseImageUrl } from "@/lib/constants"
 import {
@@ -37,6 +39,8 @@ export default function MovieDetailPage() {
   const { movie, trailer, isLoading, isError, error } = useMovieDetails(movieId)
   const { isAddingListItem } = useListItemsMutations()
   const director = movie?.credits ? getDirector(movie.credits) : null
+
+  const { getMovieStatus, updateMovieStatus } = useMovieBatchStatus([movieId])
 
   const showLoader = isLoading || (!movie && !isError)
 
@@ -72,7 +76,7 @@ export default function MovieDetailPage() {
         </div>
       ) : movie ? (
         <>
-          <section className="relative overflow-hidden">
+          <section className="relative overflow-visible">
             <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{
@@ -228,6 +232,14 @@ export default function MovieDetailPage() {
                           {isAddingListItem ? "Adding..." : "Add to List"}
                         </Button>
                       </AddListItemDialog>
+
+                      <MovieStatusOverlay
+                        movieId={movieId}
+                        {...getMovieStatus(movieId)}
+                        onStatusUpdate={(updates) =>
+                          updateMovieStatus(movieId, updates)
+                        }
+                      />
                     </div>
                   </div>
                 </div>

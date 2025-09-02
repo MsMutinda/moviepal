@@ -84,3 +84,45 @@ export const movies = pgTable(
   }),
 )
 //#endregion
+
+//#region Likes
+export const likes = pgTable(
+  "likes",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    movieId: uuid("movie_id")
+      .notNull()
+      .references(() => movies.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.movieId] }),
+    userIdx: index("likes_user_id_idx").on(t.userId),
+    movieIdx: index("likes_movie_id_idx").on(t.movieId),
+  }),
+)
+//#endregion
+
+//#region Ratings
+export const ratings = pgTable(
+  "ratings",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    movieId: uuid("movie_id")
+      .notNull()
+      .references(() => movies.id, { onDelete: "cascade" }),
+    score: integer("score").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.userId, t.movieId] }),
+    userIdx: index("ratings_user_id_idx").on(t.userId),
+    movieIdx: index("ratings_movie_id_idx").on(t.movieId),
+  }),
+)
+//#endregion

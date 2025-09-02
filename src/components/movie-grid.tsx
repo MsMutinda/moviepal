@@ -6,10 +6,12 @@ import Link from "next/link"
 import { useMemo } from "react"
 
 import { AddListItemDialog } from "@/components/add-to-list-dialog"
+import { MovieStatusOverlay } from "@/components/movie-status-overlay"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useInfiniteScroll } from "@/hooks/use-intersection-observer"
 import { useListItemsMutations } from "@/hooks/use-list-items"
+import { useMovieBatchStatus } from "@/hooks/use-movie-batch-status"
 import { tmdbBaseImageUrl } from "@/lib/constants"
 import { Movie } from "@/lib/types"
 
@@ -43,6 +45,13 @@ export function MovieGrid({
       return true
     })
   }, [movies])
+
+  const movieIds = useMemo(
+    () => uniqueMovies.map((movie) => movie.id.toString()),
+    [uniqueMovies],
+  )
+
+  const { getMovieStatus, updateMovieStatus } = useMovieBatchStatus(movieIds)
 
   const sentinelRef = useInfiniteScroll(
     onLoadMore || (() => {}),
@@ -104,7 +113,7 @@ export function MovieGrid({
                     <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
                   </Link>
 
-                  <div className="absolute top-2 right-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <AddListItemDialog
                       movieId={movie.id}
                       movieTitle={movie.title}
@@ -122,6 +131,13 @@ export function MovieGrid({
                         )}
                       </Button>
                     </AddListItemDialog>
+                    <MovieStatusOverlay
+                      movieId={movie.id.toString()}
+                      {...getMovieStatus(movie.id.toString())}
+                      onStatusUpdate={(updates) =>
+                        updateMovieStatus(movie.id.toString(), updates)
+                      }
+                    />
                   </div>
                 </div>
               </div>
