@@ -1,7 +1,7 @@
 export const appInfo = {
-  name: "Moviebox",
+  name: "MoviePal",
   description:
-    "Moviebox is a platform where users can browse, search, and get personalized movie recommendations.",
+    "MoviePal is a platform where users can browse, search, and get personalized movie recommendations.",
 }
 
 export const tmdbBaseUrl = "https://api.themoviedb.org/3"

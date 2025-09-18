@@ -102,7 +102,7 @@ export default function SignupPage() {
               Create account
             </CardTitle>
             <CardDescription className="text-center">
-              Join the Moviebox community and enjoy a world full of
+              Join the MoviePal community and enjoy a world full of
               entertainment
             </CardDescription>
           </CardHeader>

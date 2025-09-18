@@ -23,19 +23,19 @@ export function Footer() {
             <h4 className="text-lg font-semibold">Follow us</h4>
             <div className="flex items-center gap-4">
               <a
-                href="https://www.instagram.com/mymoviebox"
+                href="https://www.instagram.com/moviepal"
                 className="hover:text-foreground transition-colors"
               >
                 <Instagram />
               </a>
               <a
-                href="https://www.twitter.com/mymoviebox"
+                href="https://www.twitter.com/moviepal"
                 className="hover:text-foreground transition-colors"
               >
                 <Twitter />
               </a>
               <a
-                href="https://www.youtube.com/mymoviebox"
+                href="https://www.youtube.com/moviepal"
                 className="hover:text-foreground transition-colors"
               >
                 <Youtube />
@@ -48,11 +48,11 @@ export function Footer() {
             <ul className="text-muted-foreground space-y-2 text-sm">
               <li>
                 <a
-                  href="mailto:hello@moviebox.com"
+                  href="mailto:hello@moviepal.com"
                   className="hover:text-foreground transition-colors"
                 >
                   We would love to hear from you. Send us a message at
-                  hello@moviebox.com
+                  hello@moviepal.com
                 </a>
               </li>
             </ul>

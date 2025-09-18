@@ -1,6 +1,6 @@
-# Testing Guide for MovieBox
+# Testing Guide for MoviePal
 
-This document provides a comprehensive guide to the testing setup and how to run tests for the MovieBox application.
+This document provides a comprehensive guide to the testing setup and how to run tests for the MoviePal application.
 
 ## Test Structure
 

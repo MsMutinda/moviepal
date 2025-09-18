@@ -1,8 +1,8 @@
-# Moviebox App - Requirements
+# MoviePal App - Requirements
 
 ## 1. Overview
 
-Moviebox is an application where people can browse, search, and get personalized movie recommendations using data from TMDB. 
+MoviePal is an application where people can browse, search, and get personalized movie recommendations using data from TMDB. 
 Visitors can check out trending and popular movies right away, while logged-in users get to like, rate, and save movies to private lists. 
 The more users interact with the app, the better their recommendations get.
 

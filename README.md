@@ -1,6 +1,6 @@
-# Moviebox App
+# MoviePal App
 
-Moviebox is a movie discovery platform powered by TMDB[https://www.themoviedb.org/] where users can browse, search,
+MoviePal is a movie discovery platform powered by TMDB[https://www.themoviedb.org/] where users can browse, search,
 and get personalized movie recommendations. Guests can explore trending and popular movies, while registered users
 can like, rate, and save movies to private or custom lists.
 
@@ -8,7 +8,7 @@ can like, rate, and save movies to private or custom lists.
 
 ## Features
 
-Moviebox allows users to:
+MoviePal allows users to:
 
 - Browse trending, popular, and top-rated movies
 - Search, sort, and filter movies
@@ -25,8 +25,8 @@ For the complete requirements and acceptance criteria, see [docs/requirements.md
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/MsMutinda/moviebox.git
-cd moviebox
+git clone https://github.com/MsMutinda/moviepal.git
+cd moviepal
 
 # 2. Install dependencies
 pnpm install
