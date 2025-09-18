@@ -23,19 +23,18 @@ export function Header() {
       <div className="flex items-center gap-2 sm:gap-4">
         <ThemeToggle />
 
-        {isPending ||
-          (!user && (
-            <div className="flex items-center gap-2">
-              <Button
-                asChild
-                className="bg-[#009A9C] px-3 py-2 text-xs text-white hover:bg-[#009A9C]/90 sm:px-4 sm:text-sm"
-              >
-                <Link href={routes.auth.signup}>Get started for free</Link>
-              </Button>
-            </div>
-          ))}
-
-        <UserNav isPending={isPending} user={user ?? null} />
+        {isPending ? null : user ? (
+          <UserNav isPending={isPending} user={user} />
+        ) : (
+          <div className="flex items-center gap-2">
+            <Button
+              asChild
+              className="bg-[#009A9C] px-3 py-2 text-xs text-white hover:bg-[#009A9C]/90 sm:px-4 sm:text-sm"
+            >
+              <Link href={routes.auth.signup}>Get started for free</Link>
+            </Button>
+          </div>
+        )}
       </div>
     </header>
   )
