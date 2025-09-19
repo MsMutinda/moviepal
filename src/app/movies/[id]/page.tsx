@@ -221,7 +221,7 @@ export default function MovieDetailPage() {
                         <Button
                           size="lg"
                           variant="outline"
-                          className="bg-background/80 text-foreground hover:bg-background/90 w-full border-[#CCCCCC]/50 backdrop-blur-sm sm:w-auto"
+                          className="bg-background/80 text-foreground hover:bg-background/90 border-[#CCCCCC]/50 backdrop-blur-sm sm:w-auto"
                           disabled={isAddingListItem}
                         >
                           {isAddingListItem ? (

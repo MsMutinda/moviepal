@@ -133,7 +133,7 @@ export function MovieStatusOverlay({
         </Button>
 
         {showRatingPopup && (
-          <div className="bg-background absolute top-full right-0 z-[9999] mt-2 min-w-[220px] rounded-lg border p-4 shadow-xl">
+          <div className="bg-background z-[9999] mt-2 flex min-w-[220px] flex-col rounded-lg border p-4 shadow-xl">
             <div className="mb-2 text-sm font-medium">Rate this movie</div>
             <div className="grid grid-cols-5 gap-2">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((score) => (
