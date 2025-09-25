@@ -16,8 +16,11 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useMovieBatchStatus } from "@/hooks/use-movie-batch-status"
 import { useMovieRecommendations } from "@/hooks/use-movie-recommendations"
+import { authClient } from "@/lib/clients/auth"
 
 export default function RecommendationsPage() {
+  const { data: session } = authClient.useSession()
+  const isAuthenticated = !!session?.user
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const [forceRefresh, setForceRefresh] = useState(false)
@@ -239,6 +242,7 @@ export default function RecommendationsPage() {
               batchStatusData={safeBatchStatusData.movies}
               showRecommendationInfo={true}
               showDismissButton={true}
+              isAuthenticated={isAuthenticated}
             />
 
             {recommendationsData.total_pages &&

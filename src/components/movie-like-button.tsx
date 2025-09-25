@@ -8,9 +8,15 @@ import { useMovieLike } from "@/hooks/use-movie-likes"
 interface MovieLikeButtonProps {
   movieId: string
   className?: string
+  isAuthenticated?: boolean
 }
 
-export function MovieLikeButton({ movieId, className }: MovieLikeButtonProps) {
+export function MovieLikeButton({
+  movieId,
+  className,
+  isAuthenticated = false,
+}: MovieLikeButtonProps) {
+  if (!isAuthenticated) return null
   const { liked, toggleLike, isToggling, isLoading } = useMovieLike(movieId)
 
   if (isLoading) {

@@ -34,6 +34,7 @@ interface MovieGridProps {
   showPagination?: boolean
   showRecommendationInfo?: boolean
   showDismissButton?: boolean
+  isAuthenticated?: boolean
   batchStatusData?: Record<string, { liked: boolean; rating: number | null }>
 }
 
@@ -47,6 +48,7 @@ export function MovieGrid({
   showPagination = false,
   showRecommendationInfo = false,
   showDismissButton = false,
+  isAuthenticated = false,
   batchStatusData,
 }: MovieGridProps) {
   const { isAddingListItem } = useListItemsMutations()
@@ -135,35 +137,39 @@ export function MovieGrid({
                     <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20" />
                   </Link>
 
-                  <div className="absolute top-2 right-2 flex gap-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <AddListItemDialog
-                      movieId={movie.id}
-                      movieTitle={movie.title}
-                    >
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        className="h-8 w-8 p-0 shadow-lg"
-                        disabled={isAddingListItem}
+                  {isAuthenticated && (
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <AddListItemDialog
+                        movieId={movie.id}
+                        movieTitle={movie.title}
+                        isAuthenticated={isAuthenticated}
                       >
-                        {isAddingListItem ? (
-                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                        ) : (
-                          <Bookmark className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </AddListItemDialog>
-                    <MovieStatusOverlay
-                      movieId={movie.id.toString()}
-                      {...getMovieStatusData(movie.id.toString())}
-                      onStatusUpdate={(updates) =>
-                        updateMovieStatus(movie.id.toString(), updates)
-                      }
-                    />
-                    {showDismissButton && (
-                      <DismissButton movieId={movie.id.toString()} />
-                    )}
-                  </div>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="h-8 w-8 p-0 shadow-lg"
+                          disabled={isAddingListItem}
+                        >
+                          {isAddingListItem ? (
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                          ) : (
+                            <Bookmark className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </AddListItemDialog>
+                      <MovieStatusOverlay
+                        movieId={movie.id.toString()}
+                        {...getMovieStatusData(movie.id.toString())}
+                        onStatusUpdate={(updates) =>
+                          updateMovieStatus(movie.id.toString(), updates)
+                        }
+                        isAuthenticated={isAuthenticated}
+                      />
+                      {showDismissButton && (
+                        <DismissButton movieId={movie.id.toString()} />
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="p-3">

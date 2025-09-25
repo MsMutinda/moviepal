@@ -15,6 +15,7 @@ interface MovieStatusOverlayProps {
     liked?: boolean
     rating?: number | null
   }) => void
+  isAuthenticated?: boolean
 }
 
 export function MovieStatusOverlay({
@@ -22,6 +23,7 @@ export function MovieStatusOverlay({
   liked,
   rating,
   onStatusUpdate,
+  isAuthenticated = false,
 }: MovieStatusOverlayProps) {
   const [localLiked, setLocalLiked] = useState(liked)
   const [localRating, setLocalRating] = useState(rating)
@@ -83,6 +85,8 @@ export function MovieStatusOverlay({
       onStatusUpdate({ rating })
     }
   }
+
+  if (!isAuthenticated) return null
 
   return (
     <div className="flex gap-1">

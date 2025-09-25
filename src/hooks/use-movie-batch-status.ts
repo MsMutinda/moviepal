@@ -32,14 +32,17 @@ async function fetchBatchStatus(
   return res.json()
 }
 
+import { useAuthGuard } from "@/hooks/use-auth-guard"
+
 export function useMovieBatchStatus(movieIds: string[]) {
   const qc = useQueryClient()
+  const { isAuthenticated } = useAuthGuard()
   const queryKey = ["movie-batch-status", movieIds.sort().join(",")]
 
   const query = useQuery({
     queryKey,
     queryFn: () => fetchBatchStatus(movieIds),
-    enabled: movieIds.length > 0,
+    enabled: isAuthenticated && movieIds.length > 0,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false, // Don't refetch on window focus

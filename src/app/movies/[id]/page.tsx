@@ -19,6 +19,7 @@ import { MovieStatusOverlay } from "@/components/movie-status-overlay"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { useAuthGuard } from "@/hooks/use-auth-guard"
 import { useListItemsMutations } from "@/hooks/use-list-items"
 import { useMovieBatchStatus } from "@/hooks/use-movie-batch-status"
 import { useMovieDetails } from "@/hooks/use-tmdb-data"
@@ -35,6 +36,7 @@ export default function MovieDetailPage() {
   const params = useParams()
   const router = useRouter()
   const movieId = params.id as string
+  const { isAuthenticated } = useAuthGuard()
 
   const { movie, trailer, isLoading, isError, error } = useMovieDetails(movieId)
   const { isAddingListItem } = useListItemsMutations()
@@ -214,32 +216,38 @@ export default function MovieDetailPage() {
                         </Link>
                       )}
 
-                      <AddListItemDialog
-                        movieId={movieId}
-                        movieTitle={movie.title || "Untitled Movie"}
-                      >
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="bg-background/80 text-foreground hover:bg-background/90 border-[#CCCCCC]/50 backdrop-blur-sm sm:w-auto"
-                          disabled={isAddingListItem}
-                        >
-                          {isAddingListItem ? (
-                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current"></div>
-                          ) : (
-                            <Bookmark className="mr-2 h-4 w-4" />
-                          )}
-                          {isAddingListItem ? "Adding..." : "Add to List"}
-                        </Button>
-                      </AddListItemDialog>
+                      {isAuthenticated && (
+                        <>
+                          <AddListItemDialog
+                            movieId={movieId}
+                            movieTitle={movie.title || "Untitled Movie"}
+                            isAuthenticated={isAuthenticated}
+                          >
+                            <Button
+                              size="lg"
+                              variant="outline"
+                              className="bg-background/80 text-foreground hover:bg-background/90 border-[#CCCCCC]/50 backdrop-blur-sm sm:w-auto"
+                              disabled={isAddingListItem}
+                            >
+                              {isAddingListItem ? (
+                                <div className="mr-2 h-4 w-4 animate-spin rounded-full border-b-2 border-current"></div>
+                              ) : (
+                                <Bookmark className="mr-2 h-4 w-4" />
+                              )}
+                              {isAddingListItem ? "Adding..." : "Add to List"}
+                            </Button>
+                          </AddListItemDialog>
 
-                      <MovieStatusOverlay
-                        movieId={movieId}
-                        {...getMovieStatus(movieId)}
-                        onStatusUpdate={(updates) =>
-                          updateMovieStatus(movieId, updates)
-                        }
-                      />
+                          <MovieStatusOverlay
+                            movieId={movieId}
+                            {...getMovieStatus(movieId)}
+                            onStatusUpdate={(updates) =>
+                              updateMovieStatus(movieId, updates)
+                            }
+                            isAuthenticated={isAuthenticated}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>

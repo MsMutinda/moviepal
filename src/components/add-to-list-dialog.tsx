@@ -22,13 +22,16 @@ interface AddListItemDialogProps {
   children: React.ReactNode
   movieId: string | number
   movieTitle: string
+  isAuthenticated?: boolean
 }
 
 export function AddListItemDialog({
   children,
   movieId,
   movieTitle,
+  isAuthenticated = false,
 }: AddListItemDialogProps) {
+  if (!isAuthenticated) return null
   if (typeof movieId !== "string") {
     movieId = movieId.toString()
   }

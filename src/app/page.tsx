@@ -17,10 +17,12 @@ import {
   useMovieDiscoveryInfinite,
   useMovieTabs,
 } from "@/hooks/use-tmdb-data"
+import { authClient } from "@/lib/clients/auth"
 import { tmdbBaseImageUrl } from "@/lib/constants"
 import { MovieTab } from "@/lib/types"
 
 export default function LandingPage() {
+  const { data: session } = authClient.useSession()
   const [searchQuery, setSearchQuery] = useState("")
   const debouncedQuery = useDebouncedValue(searchQuery, 500)
   const [sortBy, setSortBy] = useState("popularity.desc")
@@ -223,6 +225,7 @@ export default function LandingPage() {
               isFetchingNextPage={isFetchingNextPage}
               onLoadMore={fetchNextPage}
               showPagination={true}
+              isAuthenticated={!!session?.user}
             />
           </div>
         )}
@@ -270,6 +273,7 @@ export default function LandingPage() {
                   activeTab === "trending" ? fetchNextTabPage : undefined
                 }
                 showPagination={activeTab === "trending"}
+                isAuthenticated={!!session?.user}
               />
             </TabsContent>
 
@@ -286,6 +290,7 @@ export default function LandingPage() {
                   activeTab === "popular" ? fetchNextTabPage : undefined
                 }
                 showPagination={activeTab === "popular"}
+                isAuthenticated={!!session?.user}
               />
             </TabsContent>
 
@@ -302,6 +307,7 @@ export default function LandingPage() {
                   activeTab === "top_rated" ? fetchNextTabPage : undefined
                 }
                 showPagination={activeTab === "top_rated"}
+                isAuthenticated={!!session?.user}
               />
             </TabsContent>
           </Tabs>

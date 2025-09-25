@@ -50,14 +50,17 @@ async function removeRating(movieId: string): Promise<void> {
   }
 }
 
+import { useAuthGuard } from "@/hooks/use-auth-guard"
+
 export function useMovieRating(movieId: string) {
   const qc = useQueryClient()
+  const { isAuthenticated } = useAuthGuard()
   const queryKey = ["movie-rating", movieId]
 
   const query = useQuery({
     queryKey,
     queryFn: ({ signal }) => fetchRating(movieId, signal),
-    enabled: false, // Don't fetch automatically - use batch status instead
+    enabled: isAuthenticated, // Only fetch when authenticated
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   })
